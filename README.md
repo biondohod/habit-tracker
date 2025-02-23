@@ -9,13 +9,17 @@
 3. Откройте терминал (ctrl+j).
 4. Введите следующие команды:
 
-   ```sh
-   cd frontend
-   npm i
-   cd ../
-   npm i
-   cp .env.example .env
-   ```
+### Windows
+
+```powershell
+cd frontend; npm i; cd ..; npm i; cp .env.example .env
+```
+
+### MacOs
+
+```sh
+cd frontend && npm i && cd ../ && npm i && cp .env.example .env
+```
 
 Для работы с проектом в браузере выполните следующие шаги:
 
