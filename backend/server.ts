@@ -1,4 +1,5 @@
-import express from "express";
+// filepath: /c:/Programming/habit-tracker/backend/server.ts
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
@@ -16,7 +17,7 @@ app.use(express.json());
 connectDB();
 
 // Тестовый маршрут
-app.get("/api/test", (req, res) => {
+app.get("/api/test", (req: Request, res: Response) => {
   try {
     res.json({ message: "Сервер работает! 🚀" });
   } catch (error) {
@@ -26,7 +27,7 @@ app.get("/api/test", (req, res) => {
 });
 
 // Создание поста
-app.post("/api/posts", async (req, res) => {
+app.post("/api/posts", async (req: Request, res: Response) => {
   try {
     const { title, text } = req.body;
     const newPost = new Post({ title, text });
@@ -39,7 +40,7 @@ app.post("/api/posts", async (req, res) => {
 });
 
 // Запрос всех постов
-app.get("/api/posts", async (req, res) => {
+app.get("/api/posts", async (req: Request, res: Response) => {
   try {
     const posts = await Post.find();
     res.json(posts);
@@ -49,4 +50,6 @@ app.get("/api/posts", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`✅ Сервер запущен на http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`✅ Сервер запущен на http://localhost:${PORT}`)
+);
