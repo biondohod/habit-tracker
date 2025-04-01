@@ -6,7 +6,8 @@ import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const port = process.env.PORT;
+const backendPort = process.env.BACKEND_PORT;
+const frontendPort = process.env.FRONTEND_PORT;
 
 export default defineConfig({
   plugins: [react()],
@@ -18,9 +19,11 @@ export default defineConfig({
     }
   },
   server: {
+    host: true,
+    port: parseInt(frontendPort, 10),
     proxy: {
       "/api": {
-        target: `http://localhost:${port}`,
+        target: `http://backend:${backendPort}`,
         changeOrigin: true,
         secure: false,
       },

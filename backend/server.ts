@@ -8,7 +8,7 @@ import Post from "./models/Post.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.BACKEND_PORT || "5000";
 
 // Middleware
 app.use(cors());
@@ -50,6 +50,6 @@ app.get("/api/posts", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(PORT, () =>
-  console.log(`✅ Сервер запущен на http://localhost:${PORT}`)
-);
+app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
+  console.log(`✅ Server is running on port ${PORT}`);
+});
