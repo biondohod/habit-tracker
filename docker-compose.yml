@@ -11,8 +11,10 @@ services:
       - NODE_ENV=development
       - BACKEND_PORT=${BACKEND_PORT}
       - MONGO_URI=${MONGO_URI}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
       - CHOKIDAR_USEPOLLING=true
-    command: npm run server # Используем nodemon для hot-reload
+    command: npm run dev # Используем nodemon для hot-reload
     depends_on:
       - mongodb
 

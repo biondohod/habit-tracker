@@ -1,8 +1,8 @@
-FROM node:22-alpine
+FROM node:22
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json nodemon.json tsconfig.json ./
 RUN npm install
 
-CMD ["npm", "run", "server"]
+CMD ["npm", "run", "dev"]

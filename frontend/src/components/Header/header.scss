@@ -19,10 +19,9 @@
     padding: 12px;
     background-color: rgba(255, 255, 255, 0.87);
     border-radius: 8px;
-    color: $dark-color;
     font-size: 16px;
     cursor: pointer;
-    transition: .3s all;
+    transition: 0.3s all;
 
     &:hover {
       background-color: #646cff;

@@ -9,6 +9,7 @@
 3. Выполните команду для сборки и запуска контейнеров:
 
    ```sh
+   cp .env.example .env
    docker compose up -d --build
    ```
 

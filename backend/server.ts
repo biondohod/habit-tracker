@@ -1,25 +1,33 @@
-// filepath: /c:/Programming/habit-tracker/backend/server.ts
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import Post from "./models/Post.js";
+import { userCreate } from "./controllers/authController.js";
 
 dotenv.config();
 
 const app = express();
+
 const PORT = process.env.BACKEND_PORT || "5000";
+const URL = "/api";
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-connectDB();
+connectDB().then(() => {
+  app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
+    console.log(`✅ Server is running on port ${PORT}`);
+  });
+});
+
+app.post(`${URL}/register`, userCreate);
 
 // Тестовый маршрут
 app.get("/api/test", (req: Request, res: Response) => {
   try {
-    res.json({ message: "Сервер работает! 🚀" });
+    res.json({ message: "Сервер работает!🚀" });
   } catch (error) {
     console.error("Ошибка на /api/test:", error);
     res.status(500).json({ error: "Ошибка сервера" });
@@ -48,8 +56,4 @@ app.get("/api/posts", async (req: Request, res: Response) => {
     console.error("Ошибка при запросе постов:", error);
     res.status(500).json({ error: "Ошибка при запросе постов" });
   }
-});
-
-app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
-  console.log(`✅ Server is running on port ${PORT}`);
 });
