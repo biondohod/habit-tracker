@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import "./auth.scss";
 import Loader from "../../components/Loader/Loader";
+import { useLogin, useRegister } from "../../query/mutations";
+import { Bounce, toast } from "react-toastify";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ email: "", password: "", name: "" });
+  const { mutateAsync: signIn, isPending: signInPending } = useLogin();
+  const { mutateAsync: signUp, isPending: signUpPending } = useRegister();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -12,12 +17,15 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
     if (isLogin) {
-      console.log("Login:", { email: form.email, password: form.password });
+      signIn({ email: form.email, password: form.password });
     } else {
-      console.log("Register:", form);
+      signUp(form);
     }
   };
+
+  const isLoading = signInPending || signUpPending;
 
   return (
     <div className="auth">
@@ -50,10 +58,17 @@ const Auth = () => {
             onChange={handleChange}
             required
           />
-          <button type="submit">
-            {isLogin ? "Войти" : "Зарегистрироваться"}
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <Loader size={24} />
+            ) : isLogin ? (
+              "Войти"
+            ) : (
+              "Зарегистрироваться"
+            )}
           </button>
         </form>
+        {error && <div style={{ color: "red", marginTop: 10 }}>{error}</div>}
         <div className="auth-toggle">
           {isLogin ? (
             <span>

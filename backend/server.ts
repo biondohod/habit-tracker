@@ -8,6 +8,7 @@ import {
   refreshToken,
   userCreate,
   userDelete,
+  userGet,
   userLogin,
   userLogout,
   verifyToken,
@@ -34,13 +35,15 @@ connectDB().then(() => {
   });
 });
 
-app.post(`${URL}/register`, userCreate);
+app.post(`${URL}/user/register`, userCreate);
 
-app.post(`${URL}/login`, userLogin);
+app.post(`${URL}/user/login`, userLogin);
 
-app.post(`${URL}/refresh`, verifyToken, refreshToken);
+app.get(`${URL}/user/get`, verifyToken, userGet);
 
-app.post(`${URL}/logout`, verifyToken, userLogout);
+app.get(`${URL}/user/refresh`, verifyToken, refreshToken);
+
+app.post(`${URL}/user/logout`, verifyToken, userLogout);
 
 app.delete(`${URL}/user/delete/:id`, verifyToken, userDelete);
 
