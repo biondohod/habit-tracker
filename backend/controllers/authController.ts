@@ -4,9 +4,10 @@ import jwt from "jsonwebtoken";
 import { IUser, JwtUserPayload } from "../types/userTypes.js";
 import bcrypt from "bcrypt";
 import {
+  ACCESS_COOKIE_MAX_AGE,
   ACCESS_SECRET,
   ACCESS_TOKEN_EXPIRES_IN,
-  COOKIE_MAX_AGE,
+  REFRESH_COOKIE_MAX_AGE,
   REFRESH_SECRET,
   REFRESH_TOKEN_EXPIRES_IN,
   SECURE_COOKIE,
@@ -27,10 +28,9 @@ const generateRefreshToken = (user: IUser) => {
 };
 
 export const verifyToken: RequestHandler = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
-    jwt.verify(token, ACCESS_SECRET, (err, data) => {
+  const token = req.cookies.accessToken;
+  if (token) {
+    jwt.verify(token, ACCESS_SECRET, (err: any, data: any) => {
       if (err) {
         return res
           .status(403)
@@ -65,7 +65,7 @@ export const refreshToken: RequestHandler = async (req, res) => {
         return res.status(403).json({ message: "Токен недействителен" });
       }
 
-      const newAcessToken = generateAccessToken(user);
+      const newAccessToken = generateAccessToken(user);
       const newRefreshToken = generateRefreshToken(user);
       user.refreshToken = newRefreshToken;
       await user.save();
@@ -74,11 +74,18 @@ export const refreshToken: RequestHandler = async (req, res) => {
         httpOnly: true,
         sameSite: "lax",
         secure: SECURE_COOKIE,
-        maxAge: COOKIE_MAX_AGE,
+        maxAge: REFRESH_COOKIE_MAX_AGE,
       });
+
+      res.cookie("accessToken", newAccessToken, {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: SECURE_COOKIE,
+        maxAge: ACCESS_COOKIE_MAX_AGE,
+      });
+
       res.status(200).json({
         message: "Токены обновлены",
-        accessToken: newAcessToken,
       });
     });
   } catch (err: any) {
@@ -114,7 +121,14 @@ export const userCreate: RequestHandler = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: COOKIE_MAX_AGE,
+      maxAge: REFRESH_COOKIE_MAX_AGE,
+    });
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: SECURE_COOKIE,
+      maxAge: ACCESS_COOKIE_MAX_AGE,
     });
 
     res.status(201).json({
@@ -124,7 +138,6 @@ export const userCreate: RequestHandler = async (req, res) => {
         email: user.email,
         name: user.name,
       },
-      accessToken,
     });
   } catch (err: any) {
     res.status(500).json({
@@ -162,7 +175,14 @@ export const userLogin: RequestHandler = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: COOKIE_MAX_AGE,
+      maxAge: REFRESH_COOKIE_MAX_AGE,
+    });
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: SECURE_COOKIE,
+      maxAge: ACCESS_COOKIE_MAX_AGE,
     });
 
     res.status(200).json({
@@ -172,7 +192,6 @@ export const userLogin: RequestHandler = async (req, res) => {
         email: user.email,
         name: user.name,
       },
-      accessToken,
     });
   } catch (err: any) {
     res.status(500).json({
@@ -182,19 +201,49 @@ export const userLogin: RequestHandler = async (req, res) => {
   }
 };
 
-export const userLogout: RequestHandler = async (req, res) => {
+export const userGet: RequestHandler = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) {
+    const currentId = req.user?.id;
+    if (!currentId) {
       res.status(401).json({ message: "Пользователь не авторизован" });
       return;
     }
+    const user = await User.findById(currentId).select(
+      "-password -refreshToken"
+    );
+    if (!user) {
+      res.status(404).json({ message: "Пользователь не найден" });
+      return;
+    }
+    res.status(200).json(user);
+  } catch (err: any) {
+    res.status(500).json({
+      message: "Непредвиденная ошибка при получении пользователя",
+      err: err,
+    });
+  }
+};
+
+export const userLogout: RequestHandler = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: SECURE_COOKIE,
+    });
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
     });
+
+    if (!refreshToken) {
+      res.status(401).json({ message: "Пользователь не авторизован" });
+      return;
+    }
 
     const user = await User.findOne({ refreshToken });
     if (!user) {
@@ -225,6 +274,17 @@ export const userDelete: RequestHandler = async (req, res) => {
         res.status(404).json({ message: "Пользователь не найден" });
         return;
       }
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: SECURE_COOKIE,
+      });
+
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: SECURE_COOKIE,
+      });
       res.status(200).json({ message: "Пользователь успешно удален" });
     } else {
       res
