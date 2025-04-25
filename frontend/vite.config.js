@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 import dotenv from "dotenv";
 import path from "path";
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const backendPort = process.env.BACKEND_PORT;
 const frontendPort = process.env.FRONTEND_PORT;
@@ -14,9 +14,12 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/styles/variables.scss" as *;`
-      }
-    }
+        additionalData: `
+          @use "@/styles/variables.scss" as *;
+          @use "@/styles/mixins.scss" as *;
+        `,
+      },
+    },
   },
   server: {
     host: true,
@@ -31,7 +34,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      "@": path.resolve(__dirname, "src"),
     },
   },
 });

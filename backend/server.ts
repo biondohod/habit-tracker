@@ -1,25 +1,53 @@
-// filepath: /c:/Programming/habit-tracker/backend/server.ts
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
+import cookieParser from "cookie-parser";
 import Post from "./models/Post.js";
+import {
+  refreshToken,
+  userCreate,
+  userDelete,
+  userLogin,
+  userLogout,
+  verifyToken,
+} from "./controllers/authController.js";
+import { PORT, URL } from "./constants/conts.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || "5000";
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
-connectDB();
+connectDB().then(() => {
+  app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
+    console.log(`✅ Server is running on port ${PORT}`);
+  });
+});
+
+app.post(`${URL}/register`, userCreate);
+
+app.post(`${URL}/login`, userLogin);
+
+app.post(`${URL}/refresh`, verifyToken, refreshToken);
+
+app.post(`${URL}/logout`, verifyToken, userLogout);
+
+app.delete(`${URL}/user/delete/:id`, verifyToken, userDelete);
 
 // Тестовый маршрут
 app.get("/api/test", (req: Request, res: Response) => {
   try {
-    res.json({ message: "Сервер работает! 🚀" });
+    res.json({ message: "Сервер работает!🚀" });
   } catch (error) {
     console.error("Ошибка на /api/test:", error);
     res.status(500).json({ error: "Ошибка сервера" });
@@ -48,8 +76,4 @@ app.get("/api/posts", async (req: Request, res: Response) => {
     console.error("Ошибка при запросе постов:", error);
     res.status(500).json({ error: "Ошибка при запросе постов" });
   }
-});
-
-app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
-  console.log(`✅ Server is running on port ${PORT}`);
 });

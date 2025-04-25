@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import PostsList from "../components/PostsList/PostsList";
-import { getPots, testRequest } from "../api/api";
-import Form from "../components/Form/Form";
+import PostsList from "../../components/PostsList/PostsList";
+import { getPots, testRequest } from "../../api/api";
+import Form from "../../components/Form/Form";
 
 const Home = () => {
   const [message, setMessage] = useState("Не запрашивался");
