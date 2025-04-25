@@ -2,19 +2,24 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
+import cookieParser from "cookie-parser";
 import Post from "./models/Post.js";
-import { userCreate } from "./controllers/authController.js";
+import { userCreate, userLogin } from "./controllers/authController.js";
+import { PORT, URL } from "./constants/conts.js";
 
 dotenv.config();
 
 const app = express();
 
-const PORT = process.env.BACKEND_PORT || "5000";
-const URL = "/api";
-
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 connectDB().then(() => {
   app.listen(parseInt(PORT, 10), "0.0.0.0", () => {
@@ -23,6 +28,8 @@ connectDB().then(() => {
 });
 
 app.post(`${URL}/register`, userCreate);
+
+app.post(`${URL}/login`, userLogin);
 
 // Тестовый маршрут
 app.get("/api/test", (req: Request, res: Response) => {
