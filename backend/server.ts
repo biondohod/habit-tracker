@@ -4,7 +4,14 @@ import dotenv from "dotenv";
 import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 import Post from "./models/Post.js";
-import { userCreate, userLogin } from "./controllers/authController.js";
+import {
+  refreshToken,
+  userCreate,
+  userDelete,
+  userLogin,
+  userLogout,
+  verifyToken,
+} from "./controllers/authController.js";
 import { PORT, URL } from "./constants/conts.js";
 
 dotenv.config();
@@ -30,6 +37,12 @@ connectDB().then(() => {
 app.post(`${URL}/register`, userCreate);
 
 app.post(`${URL}/login`, userLogin);
+
+app.post(`${URL}/refresh`, verifyToken, refreshToken);
+
+app.post(`${URL}/logout`, verifyToken, userLogout);
+
+app.delete(`${URL}/user/delete/:id`, verifyToken, userDelete);
 
 // Тестовый маршрут
 app.get("/api/test", (req: Request, res: Response) => {
