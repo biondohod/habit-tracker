@@ -3,16 +3,13 @@ import Habit from "../models/Habit.js";
 
 export const habitCreate: RequestHandler = async (req, res) => {
   try {
-    const { title, description, costPerWeek } = req.body;
     const userId = req.user?.id;
     if (!userId) {
       res.status(401).json({ message: "Пользователь не авторизован" });
       return;
     }
     const newHabit = new Habit({
-      title,
-      description,
-      costPerWeek,
+      ...req.body,
       user: userId,
     });
     await newHabit.save();

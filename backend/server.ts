@@ -28,7 +28,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: true,
     credentials: true,
   })
 );
@@ -49,7 +49,7 @@ app.post(`${URL}/user/login`, userLogin);
 
 app.get(`${URL}/user/get`, verifyToken, userGet);
 
-app.get(`${URL}/user/refresh`, verifyToken, refreshToken);
+app.get(`${URL}/user/refresh`, refreshToken);
 
 app.post(`${URL}/user/logout`, verifyToken, userLogout);
 

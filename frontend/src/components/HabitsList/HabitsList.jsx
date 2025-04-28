@@ -7,7 +7,7 @@ import { useHabits } from "../../query/queries";
 const HabitsList = () => {
   const { data: habits, isLoading } = useHabits();
 
-  if (isLoading) return <Loader size={64} />;
+  if (isLoading) return <Loader size={86} />;
 
   if (!habits || habits.length === 0)
     return (
