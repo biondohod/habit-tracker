@@ -83,7 +83,7 @@ const Form = ({ type = "create" }) => {
         navigate("/");
       }
     } catch (err) {
-      setError("Ошибка при сохранении привычки");
+      console.log(err);
     }
   };
 
