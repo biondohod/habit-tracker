@@ -1,11 +1,11 @@
 import React from "react";
 import Header from "../Header/Header";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, showHeader = true }) => {
   return (
     <>
-      {/* <Header /> */}
-      <main>{children}</main>
+      {showHeader && <Header />}
+      <main style={{ marginTop: showHeader ? "91px" : 0 }}>{children}</main>
     </>
   );
 };

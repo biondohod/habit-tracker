@@ -1,31 +1,105 @@
 .header {
   position: fixed;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 36px;
-  width: 1024px;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  background: $color-card;
+  box-shadow: $shadow;
+  padding: 24px 0;
   display: flex;
   justify-content: center;
 
+  &__content {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
   &__nav {
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 32px;
+    padding: 0 32px;
+
+    @include below($breakpoint-mobile) {
+      flex-direction: column;
+    }
+  }
+
+  &__greeting {
+    font-size: 20px;
+    font-weight: 600;
+    color: $color-title;
+    font-family: $font-main;
+  }
+
+  &__logout {
+    background: $color-primary;
+    color: #fff;
+    border: none;
+    border-radius: $radius-sm;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: $font-main;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover:enabled {
+      background: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  &__nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 0 32px;
+
+    @include below($breakpoint-mobile) {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: 18px;
   }
 
   &__link {
-    display: block;
-    padding: 12px;
-    background-color: rgba(255, 255, 255, 0.87);
-    border-radius: 8px;
+    color: $color-title;
     font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s all;
+    font-weight: 600;
+    font-family: $font-main;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: $radius-xs;
+    transition: background 0.18s, color 0.18s;
 
     &:hover {
-      background-color: #646cff;
-      color: #ffffff;
+      background: $color-primary-light;
+      color: white;
+    }
+  }
+
+  &__link--active {
+    background: $color-primary;
+    color: #fff;
+    cursor: default;
+
+    &:hover {
+      background: $color-primary;
     }
   }
 }

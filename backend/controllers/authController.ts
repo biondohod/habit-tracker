@@ -4,10 +4,9 @@ import jwt from "jsonwebtoken";
 import { IUser, JwtUserPayload } from "../types/userTypes.js";
 import bcrypt from "bcrypt";
 import {
-  ACCESS_COOKIE_MAX_AGE,
+  COOKIE_MAX_AGE,
   ACCESS_SECRET,
   ACCESS_TOKEN_EXPIRES_IN,
-  REFRESH_COOKIE_MAX_AGE,
   REFRESH_SECRET,
   REFRESH_TOKEN_EXPIRES_IN,
   SECURE_COOKIE,
@@ -74,14 +73,14 @@ export const refreshToken: RequestHandler = async (req, res) => {
         httpOnly: true,
         sameSite: "lax",
         secure: SECURE_COOKIE,
-        maxAge: REFRESH_COOKIE_MAX_AGE,
+        maxAge: COOKIE_MAX_AGE,
       });
 
       res.cookie("accessToken", newAccessToken, {
         httpOnly: true,
         sameSite: "lax",
         secure: SECURE_COOKIE,
-        maxAge: ACCESS_COOKIE_MAX_AGE,
+        maxAge: COOKIE_MAX_AGE,
       });
 
       res.status(200).json({
@@ -121,14 +120,14 @@ export const userCreate: RequestHandler = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: REFRESH_COOKIE_MAX_AGE,
+      maxAge: COOKIE_MAX_AGE,
     });
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: ACCESS_COOKIE_MAX_AGE,
+      maxAge: COOKIE_MAX_AGE,
     });
 
     res.status(201).json({
@@ -175,14 +174,14 @@ export const userLogin: RequestHandler = async (req, res) => {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: REFRESH_COOKIE_MAX_AGE,
+      maxAge: COOKIE_MAX_AGE,
     });
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       sameSite: "lax",
       secure: SECURE_COOKIE,
-      maxAge: ACCESS_COOKIE_MAX_AGE,
+      maxAge: COOKIE_MAX_AGE,
     });
 
     res.status(200).json({
