@@ -11,6 +11,11 @@ export const habitCreate: RequestHandler = async (req, res) => {
     const startedAt = req.body.startedAt
       ? new Date(req.body.startedAt)
       : new Date();
+
+    if (startedAt > new Date()) {
+      res.status(400).json({ message: "Дата начала не может быть в будущем" });
+      return;
+    }
     const newHabit = new Habit({
       ...req.body,
       startedAt,
@@ -72,10 +77,15 @@ export const habitUpdate: RequestHandler = async (req, res) => {
     }
 
     let updateData = { ...req.body };
-    if (
-      updateData.startedAt &&
-      new Date(updateData.startedAt) < new Date(habit.initialAttemptAt)
-    ) {
+    const startedAt = req.body.startedAt
+      ? new Date(req.body.startedAt)
+      : new Date(habit.startedAt);
+    if (startedAt > new Date()) {
+      res.status(400).json({ message: "Дата начала не может быть в будущем" });
+      return;
+    }
+
+    if (startedAt < new Date(habit.initialAttemptAt)) {
       updateData.initialAttemptAt = updateData.startedAt;
     }
     const updatedHabit = await Habit.findByIdAndUpdate(id, updateData, {

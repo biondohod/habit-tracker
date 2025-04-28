@@ -110,6 +110,9 @@ export const useDeleteHabit = () => {
       await apiDeleteHabit(id);
       queryClient.invalidateQueries([HABITS]);
     },
+    onSuccess: () => {
+      toast.success("Привычка успешно удалена!");
+    },
     onError: (err) => {
       const msg =
         err?.response?.data?.message ||
