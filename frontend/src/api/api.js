@@ -9,23 +9,30 @@ const URL = "/api";
 
 // User api
 export const apiRefreshToken = async () => {
-  const res = await axios.get(`${URL}/refresh`, { withCredentials: true });
+  const res = await axiosJwt.get(`${URL}/user/refresh`);
   return res.data;
 };
 
-axiosJwt.interceptors.request.use(
-  async (config) => {
-    const accessToken = getCookie("accessToken");
-    if (accessToken) {
-      const decodedToken = jwtDecode(accessToken);
-      const currentDate = new Date();
-      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+axiosJwt.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    const code = error?.response?.data?.code;
+    if (
+      code === "TOKEN_EXPIRED" &&
+      !originalRequest._retry &&
+      !originalRequest.url.endsWith("/user/refresh")
+    ) {
+      originalRequest._retry = true;
+      try {
         await apiRefreshToken();
+        return axiosJwt(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
       }
     }
-    return config;
-  },
-  (err) => Promise.reject(err)
+    return Promise.reject(error);
+  }
 );
 
 export const apiLogin = async ({ email, password }) => {

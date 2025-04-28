@@ -31,18 +31,28 @@ export const verifyToken: RequestHandler = (req, res, next) => {
   if (token) {
     jwt.verify(token, ACCESS_SECRET, (err: any, data: any) => {
       if (err) {
-        return res
-          .status(403)
-          .json({ message: "Токен недействителен", err: err });
+        if (err.name === "TokenExpiredError") {
+          return res.status(401).json({
+            message: "Токен истёк",
+            code: "TOKEN_EXPIRED",
+            err: err,
+          });
+        }
+        return res.status(403).json({
+          message: "Токен недействителен",
+          code: "TOKEN_INVALID",
+          err: err,
+        });
       }
-
       if (typeof data === "object" && data !== null) {
         req.user = data as JwtUserPayload;
       }
       next();
     });
   } else {
-    res.status(401).json({ message: "Пользователь не авторизован" });
+    res
+      .status(401)
+      .json({ message: "Пользователь не авторизован", code: "NO_TOKEN" });
   }
 };
 

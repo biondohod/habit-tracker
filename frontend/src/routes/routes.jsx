@@ -4,13 +4,13 @@ import Loader from "../components/Loader/Loader";
 import Layout from "../components/Layout/Layout";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import PublicRoute from "../components/PublicRoute/PublicRoute";
-import Header from "../components/Header/Header";
 
 const Home = React.lazy(() => import("../pages/Home/Home"));
 const Auth = React.lazy(() => import("../pages/Auth/Auth"));
 const CreateHabit = React.lazy(() =>
   import("../pages/CreateHabit/CreateHabit")
 );
+const EditHabit = React.lazy(() => import("../pages/EditHabit/EditHabit"));
 
 const router = createBrowserRouter([
   {
@@ -32,6 +32,18 @@ const router = createBrowserRouter([
         <Suspense fallback={<Loader size={86} />}>
           <ProtectedRoute>
             <CreateHabit />
+          </ProtectedRoute>
+        </Suspense>
+      </Layout>
+    ),
+  },
+  {
+    path: "/edit/:id",
+    element: (
+      <Layout>
+        <Suspense fallback={<Loader size={86} />}>
+          <ProtectedRoute>
+            <EditHabit />
           </ProtectedRoute>
         </Suspense>
       </Layout>

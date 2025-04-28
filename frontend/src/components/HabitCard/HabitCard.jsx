@@ -2,30 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./habitCard.scss";
 import { useDeleteHabit, useUpdateHabit } from "../../query/mutations";
-
-function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("ru-RU", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
-
-function getDuration(from) {
-  const now = new Date();
-  const start = new Date(from);
-  let diff = Math.floor((now - start) / 1000);
-
-  const days = Math.floor(diff / (3600 * 24));
-  diff -= days * 3600 * 24;
-  const hours = Math.floor(diff / 3600);
-  diff -= hours * 3600;
-  const minutes = Math.floor(diff / 60);
-  const seconds = diff - minutes * 60;
-
-  return `${days > 0 ? days + "д " : ""}${hours}ч ${minutes}м ${seconds}с`;
-}
+import { formatDate, getDuration } from "../../helpers/dateHelpers";
 
 const HabitCard = ({ habit }) => {
   const [timer, setTimer] = useState(getDuration(habit.startedAt));
@@ -68,7 +45,7 @@ const HabitCard = ({ habit }) => {
           <span className="habit-card__label">Попыток:</span>{" "}
           <b>{habit.attempts}</b>
         </div>
-        {habit.costPerWeek !== undefined && habit.moneySaved !== undefined && (
+        {habit.costPerWeek > 0 && habit.moneySaved !== undefined && (
           <div>
             <span className="habit-card__label">Сэкономлено:</span>{" "}
             <b>{habit.moneySaved} ₽</b>
