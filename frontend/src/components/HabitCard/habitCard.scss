@@ -1,0 +1,95 @@
+@import "@/styles/variables.scss";
+
+.habit-card {
+  background: $color-card;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  padding: 28px 24px 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $color-title;
+    margin: 0;
+    font-family: $font-main;
+  }
+
+  &__created {
+    font-size: 14px;
+    color: $color-text;
+    font-family: $font-main;
+  }
+
+  &__desc {
+    font-size: 16px;
+    color: $color-text;
+    margin-bottom: 4px;
+    font-family: $font-main;
+  }
+
+  &__info {
+    display: flex;
+    gap: 24px;
+    font-size: 15px;
+    color: $color-title;
+    font-family: $font-main;
+  }
+
+  &__label {
+    color: $color-primary-dark;
+    font-weight: 600;
+  }
+
+  &__timer {
+    font-size: 15px;
+    color: $color-title;
+    font-family: $font-main;
+    margin-bottom: 8px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  &__btn {
+    padding: 8px 18px;
+    border-radius: $radius-xs;
+    border: none;
+    font-size: 15px;
+    font-family: $font-main;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+
+    &--fail {
+      background: $color-primary-light;
+      color: $color-primary-dark;
+    }
+    &--edit {
+      background: $color-primary;
+      color: #fff;
+    }
+    &--delete {
+      background: #e57373;
+      color: #fff;
+    }
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}

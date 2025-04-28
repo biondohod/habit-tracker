@@ -1,7 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiGetUser, apiLogin, apiLogout, apiRegister } from "../api/api";
+import {
+  apiCreateHabit,
+  apiDeleteHabit,
+  apiGetUser,
+  apiLogin,
+  apiLogout,
+  apiRegister,
+  apiUpdateHabit,
+} from "../api/api";
 import { toast, Bounce } from "react-toastify";
-import { USER } from "./keys";
+import { HABITS, USER } from "./keys";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
@@ -45,6 +53,68 @@ export const useLogout = () => {
     onError: (err) => {
       const msg =
         err?.response?.data?.message || err?.message || "Ошибка выхода";
+      toast.error(msg);
+    },
+  });
+};
+
+// add redirect to habits page after success
+export const useCreateHabit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (habit) => {
+      await apiCreateHabit(habit);
+      queryClient.invalidateQueries([HABITS]);
+    },
+    onSuccess: () => {
+      toast.success("Привычка успешно создана!");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Ошибка создания привычки";
+      toast.error(msg);
+    },
+  });
+};
+
+export const useUpdateHabit = (showMotivation = false) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, habit }) => {
+      await apiUpdateHabit(id, habit);
+      queryClient.invalidateQueries([HABITS]);
+    },
+    onSuccess: () => {
+      toast.success(
+        showMotivation
+          ? "Главное - не сдаваться!"
+          : "Привычка успешно обновлена!"
+      );
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Ошибка обновления привычки";
+      toast.error(msg);
+    },
+  });
+};
+
+export const useDeleteHabit = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id) => {
+      await apiDeleteHabit(id);
+      queryClient.invalidateQueries([HABITS]);
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Ошибка удаления привычки";
       toast.error(msg);
     },
   });

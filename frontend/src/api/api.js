@@ -7,6 +7,7 @@ axiosJwt.defaults.withCredentials = true;
 
 const URL = "/api";
 
+// User api
 export const apiRefreshToken = async () => {
   const res = await axios.get(`${URL}/refresh`, { withCredentials: true });
   return res.data;
@@ -48,5 +49,33 @@ export const apiGetUser = async () => {
 
 export const apiLogout = async () => {
   const res = await axiosJwt.post(`${URL}/user/logout`);
+  return res.data;
+};
+
+// Habit api
+export const apiCreateHabit = async (habit) => {
+  const res = await axiosJwt.post(`${URL}/habit`, habit, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
+export const apiGetHabits = async () => {
+  const res = await axiosJwt.get(`${URL}/habit`);
+  return res.data;
+};
+
+export const apiGetHabit = async (id) => {
+  const res = await axiosJwt.get(`${URL}/habit/${id}`);
+  return res.data;
+};
+
+export const apiUpdateHabit = async (id, habit) => {
+  const res = await axiosJwt.patch(`${URL}/habit/${id}`, habit);
+  return res.data;
+};
+
+export const apiDeleteHabit = async (id) => {
+  const res = await axiosJwt.delete(`${URL}/habit/${id}`);
   return res.data;
 };
