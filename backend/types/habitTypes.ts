@@ -6,7 +6,9 @@ export interface IHabit extends Document {
   description?: string;
   attempts: number;
   startedAt: Date;
+  initialAttemptAt: Date;
   moneySaved?: number;
   costPerWeek?: number;
   user: Types.ObjectId;
+  createdAt: Date;
 }

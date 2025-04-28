@@ -20,6 +20,10 @@ const habitSchema: Schema = new Schema(
       type: Date,
       default: Date.now,
     },
+    initialAttemptAt: {
+      type: Date,
+      default: Date.now,
+    },
     costPerWeek: Number,
 
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },

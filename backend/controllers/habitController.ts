@@ -8,8 +8,13 @@ export const habitCreate: RequestHandler = async (req, res) => {
       res.status(401).json({ message: "Пользователь не авторизован" });
       return;
     }
+    const startedAt = req.body.startedAt
+      ? new Date(req.body.startedAt)
+      : new Date();
     const newHabit = new Habit({
       ...req.body,
+      startedAt,
+      initialAttemptAt: startedAt,
       user: userId,
     });
     await newHabit.save();
@@ -65,7 +70,15 @@ export const habitUpdate: RequestHandler = async (req, res) => {
       res.status(403).json({ message: "Нет доступа к этой привычке" });
       return;
     }
-    const updatedHabit = await Habit.findByIdAndUpdate(id, req.body, {
+
+    let updateData = { ...req.body };
+    if (
+      updateData.startedAt &&
+      new Date(updateData.startedAt) < new Date(habit.initialAttemptAt)
+    ) {
+      updateData.initialAttemptAt = updateData.startedAt;
+    }
+    const updatedHabit = await Habit.findByIdAndUpdate(id, updateData, {
       new: true,
     });
     res.status(200).json(updatedHabit);

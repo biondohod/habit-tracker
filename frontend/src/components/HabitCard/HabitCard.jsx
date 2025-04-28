@@ -34,7 +34,7 @@ const HabitCard = ({ habit }) => {
       <div className="habit-card__header">
         <h3 className="habit-card__title">{habit.title}</h3>
         <span className="habit-card__created">
-          пытаюсь бросить с {formatDate(habit.createdAt)}
+          пытаюсь бросить с {formatDate(habit.initialAttemptAt)}
         </span>
       </div>
       {habit.description && (
