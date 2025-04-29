@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useLogout } from "../../query/mutations";
 import "./header.scss";
+import { forwardRef } from "react";
 
-const Header = () => {
+const Header = forwardRef(function Header(props, ref) {
   const { mutateAsync: logOut, isPending } = useLogout();
 
   return (
-    <header className="header">
+    <header className="header" ref={ref}>
       <div className="header__content">
         <nav className="header__nav">
           <div className="header__links">
@@ -47,6 +48,6 @@ const Header = () => {
       </div>
     </header>
   );
-};
+});
 
 export default Header;
