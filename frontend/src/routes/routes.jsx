@@ -11,8 +11,9 @@ const CreateHabit = React.lazy(() =>
   import("../pages/CreateHabit/CreateHabit")
 );
 const EditHabit = React.lazy(() => import("../pages/EditHabit/EditHabit"));
-const ProfilePage = React.lazy(() =>
-  import("../components/ProfilePage/ProfilePage")
+const Profile = React.lazy(() => import("../pages/Profile/Profile"));
+const EditProfile = React.lazy(() =>
+  import("../pages/EditProfile/EditProfile")
 );
 
 const router = createBrowserRouter([
@@ -58,7 +59,19 @@ const router = createBrowserRouter([
       <Layout>
         <Suspense fallback={<Loader size={86} />}>
           <ProtectedRoute>
-            <ProfilePage />
+            <Profile />
+          </ProtectedRoute>
+        </Suspense>
+      </Layout>
+    ),
+  },
+  {
+    path: "/edit/profile",
+    element: (
+      <Layout>
+        <Suspense fallback={<Loader size={86} />}>
+          <ProtectedRoute>
+            <EditProfile />
           </ProtectedRoute>
         </Suspense>
       </Layout>

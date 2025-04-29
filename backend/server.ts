@@ -5,9 +5,6 @@ import connectDB from "./db.js";
 import cookieParser from "cookie-parser";
 import {
   refreshToken,
-  userCreate,
-  userDelete,
-  userGet,
   userLogin,
   userLogout,
   verifyToken,
@@ -20,6 +17,13 @@ import {
   habitGetById,
   habitUpdate,
 } from "./controllers/habitController.js";
+import {
+  userCreate,
+  userDelete,
+  userGet,
+  userUpdate,
+  userUpdatePassword,
+} from "./controllers/userController.js";
 
 dotenv.config();
 
@@ -41,17 +45,23 @@ connectDB().then(() => {
   });
 });
 
-// User routes
+// Auth routes
 
 app.post(`${URL}/user/register`, userCreate);
 
 app.post(`${URL}/user/login`, userLogin);
 
-app.get(`${URL}/user/get`, verifyToken, userGet);
+app.post(`${URL}/user/logout`, verifyToken, userLogout);
 
 app.get(`${URL}/user/refresh`, refreshToken);
 
-app.post(`${URL}/user/logout`, verifyToken, userLogout);
+// User routes
+
+app.get(`${URL}/user/get`, verifyToken, userGet);
+
+app.patch(`${URL}/user/update/:id`, verifyToken, userUpdate);
+
+app.patch(`${URL}/user/updatePassword/:id`, verifyToken, userUpdatePassword);
 
 app.delete(`${URL}/user/delete/:id`, verifyToken, userDelete);
 

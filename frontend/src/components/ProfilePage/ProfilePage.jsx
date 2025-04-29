@@ -5,7 +5,8 @@ import "./profilePage.scss";
 import { formatDate } from "../../helpers/dateHelpers";
 import Loader from "../Loader/Loader";
 import { useDeleteUser } from "../../query/mutations";
-import DeleteModal from "../DeleteModal/DeleteModal";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const { data: user, isLoading } = useUser();
@@ -43,6 +44,9 @@ const ProfilePage = () => {
             </>
           )}
         </div>
+        <Link to="/edit/profile" className="profile-page__edit-link">
+          Редактировать профиль
+        </Link>
         <button
           className="profile-page__delete-btn"
           onClick={() => setShowModal(true)}
@@ -51,7 +55,7 @@ const ProfilePage = () => {
         </button>
       </div>
       {showModal && (
-        <DeleteModal
+        <ConfirmationModal
           title="Вы точно хотите удалить профиль?"
           confirmText="Удалить"
           cancelText="Отмена"

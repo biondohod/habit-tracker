@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./habitCard.scss";
 import { useDeleteHabit, useUpdateHabit } from "../../query/mutations";
 import { formatDate, getDuration } from "../../helpers/dateHelpers";
-import DeleteModal from "../DeleteModal/DeleteModal";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 const HabitCard = ({ habit }) => {
   const [timer, setTimer] = useState(getDuration(habit.startedAt));
@@ -81,7 +81,7 @@ const HabitCard = ({ habit }) => {
         </button>
       </div>
       {showModal && (
-        <DeleteModal
+        <ConfirmationModal
           title="Вы точно хотите удалить эту привычку?"
           confirmText="Удалить"
           cancelText="Отмена"
