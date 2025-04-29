@@ -59,6 +59,13 @@ export const apiLogout = async () => {
   return res.data;
 };
 
+export const apiDeleteUser = async (id) => {
+  const res = await axios.delete(`/api/user/delete/${id}`, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 // Habit api
 export const apiCreateHabit = async (habit) => {
   const res = await axiosJwt.post(`${URL}/habit`, habit, {

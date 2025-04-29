@@ -1,0 +1,72 @@
+@import "@/styles/variables.scss";
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(60, 70, 100, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: $color-card;
+  border-radius: $radius-md;
+  box-shadow: $shadow;
+  padding: 32px 24px 24px 24px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $color-title;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.modal-btn {
+  padding: 10px 22px;
+  border-radius: $radius-xs;
+  border: none;
+  font-size: 15px;
+  font-family: $font-main;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+
+  &--danger {
+    background: #e57373;
+    color: #fff;
+    &:hover:enabled {
+      background: #c62828;
+    }
+  }
+
+  &:not(&--danger) {
+    background: $color-primary;
+    color: #fff;
+    &:hover:enabled {
+      background: $color-primary-dark;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}

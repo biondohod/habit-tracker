@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   apiCreateHabit,
   apiDeleteHabit,
+  apiDeleteUser,
   apiGetUser,
   apiLogin,
   apiLogout,
@@ -49,10 +50,30 @@ export const useLogout = () => {
     mutationFn: async () => {
       await apiLogout();
       queryClient.setQueryData([USER], null);
+      queryClient.removeQueries([HABITS]);
     },
     onError: (err) => {
       const msg =
         err?.response?.data?.message || err?.message || "Ошибка выхода";
+      toast.error(msg);
+    },
+  });
+};
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id) => {
+      await apiDeleteUser(id);
+      queryClient.setQueryData([USER], null);
+      queryClient.removeQueries([HABITS]);
+    },
+    onSuccess: async () => {
+      toast.success("Пользователь успешно удален!");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "Ошибка удаления";
       toast.error(msg);
     },
   });

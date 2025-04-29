@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "./habitCard.scss";
 import { useDeleteHabit, useUpdateHabit } from "../../query/mutations";
 import { formatDate, getDuration } from "../../helpers/dateHelpers";
+import DeleteModal from "../DeleteModal/DeleteModal";
 
 const HabitCard = ({ habit }) => {
   const [timer, setTimer] = useState(getDuration(habit.startedAt));
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const { mutateAsync: deleteHabit, isPending: isDeletingHabig } =
+  const { mutateAsync: deleteHabit, isPending: isDeletingHabit } =
     useDeleteHabit();
   const { mutateAsync: updateHabit, isPending: isPendingHabit } =
     useUpdateHabit(true);
@@ -72,12 +74,25 @@ const HabitCard = ({ habit }) => {
         </button>
         <button
           className="habit-card__btn habit-card__btn--delete"
-          onClick={() => deleteHabit(habit._id)}
-          disabled={isDeletingHabig}
+          onClick={() => setShowModal(true)}
+          disabled={isDeletingHabit}
         >
           Удалить
         </button>
       </div>
+      {showModal && (
+        <DeleteModal
+          title="Вы точно хотите удалить эту привычку?"
+          confirmText="Удалить"
+          cancelText="Отмена"
+          isPending={isDeletingHabit}
+          onConfirm={async () => {
+            await deleteHabit(habit._id);
+            setShowModal(false);
+          }}
+          onCancel={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 };
