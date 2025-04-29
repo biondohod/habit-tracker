@@ -11,4 +11,5 @@ export interface IHabit extends Document {
   costPerWeek?: number;
   user: Types.ObjectId;
   createdAt: Date;
+  updatedAt: Date;
 }

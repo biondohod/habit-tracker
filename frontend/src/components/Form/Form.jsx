@@ -133,7 +133,15 @@ const Form = ({ type = "create" }) => {
         />
       </div>
       <div className="habit-form__field">
-        <label htmlFor="startedAt">Дата и время начала</label>
+        <label htmlFor="startedAt">
+          Дата и время начала{" "}
+          {!isEdit && (
+            <>
+              (оставьте пустым, чтобы автоматически установить текущую дату как
+              дату начала)
+            </>
+          )}
+        </label>
         <DateTimePicker
           id="startedAt"
           name="startedAt"
