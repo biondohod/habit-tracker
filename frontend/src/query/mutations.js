@@ -8,10 +8,13 @@ import {
   apiLogout,
   apiRegister,
   apiUpdateHabit,
+  apiUpdateUser,
+  apiUpdateUserPassword,
 } from "../api/api";
 import { toast, Bounce } from "react-toastify";
 import { HABITS, USER } from "./keys";
 
+// Auth mutations
 export const useLogin = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -60,6 +63,7 @@ export const useLogout = () => {
   });
 };
 
+// User mutations
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -79,7 +83,48 @@ export const useDeleteUser = () => {
   });
 };
 
-// add redirect to habits page after success
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, userData }) => {
+      console.log(id, userData);
+      await apiUpdateUser(id, userData);
+      queryClient.invalidateQueries([USER]);
+    },
+    onSuccess: async () => {
+      toast.success("Пользователь успешно изменен!");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Ошибка редактирования пользователя";
+      toast.error(msg);
+    },
+  });
+};
+
+export const useUpdateUserPassword = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, passwords }) => {
+      await apiUpdateUserPassword(id, passwords);
+      queryClient.invalidateQueries([USER]);
+    },
+    onSuccess: async () => {
+      toast.success("Пароль успешно изменен!");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Ошибка редактирования пароля";
+      toast.error(msg);
+    },
+  });
+};
+
+// Habits mutations
 export const useCreateHabit = () => {
   const queryClient = useQueryClient();
   return useMutation({

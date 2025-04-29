@@ -7,7 +7,7 @@ axiosJwt.defaults.withCredentials = true;
 
 const URL = "/api";
 
-// User api
+// Auth api
 export const apiRefreshToken = async () => {
   const res = await axiosJwt.get(`${URL}/user/refresh`);
   return res.data;
@@ -49,20 +49,32 @@ export const apiRegister = async ({ email, password, name }) => {
   return res.data;
 };
 
-export const apiGetUser = async () => {
-  const res = await axiosJwt.get(`${URL}/user/get`);
-  return res.data;
-};
-
 export const apiLogout = async () => {
   const res = await axiosJwt.post(`${URL}/user/logout`);
   return res.data;
 };
 
+// User api
+export const apiGetUser = async () => {
+  const res = await axiosJwt.get(`${URL}/user/get`);
+  return res.data;
+};
+
+export const apiUpdateUser = async (id, user) => {
+  const res = await axiosJwt.patch(`${URL}/user/update/${id}`, user);
+  return res.data;
+};
+
+export const apiUpdateUserPassword = async (id, passwords) => {
+  const res = await axiosJwt.patch(
+    `${URL}/user/updatePassword/${id}`,
+    passwords
+  );
+  return res.data;
+};
+
 export const apiDeleteUser = async (id) => {
-  const res = await axios.delete(`/api/user/delete/${id}`, {
-    withCredentials: true,
-  });
+  const res = await axiosJwt.delete(`/api/user/delete/${id}`);
   return res.data;
 };
 

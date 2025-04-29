@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import "./deleteModal.scss";
+import "./confirmationModal.scss";
 import { openModalLock } from "../../helpers/openModalLock";
 
-const DeleteModal = ({
+const ConfirmationModal = ({
   title = "Вы точно хотите удалить?",
   confirmText = "Удалить",
   cancelText = "Отмена",
@@ -36,4 +36,4 @@ const DeleteModal = ({
   );
 };
 
-export default DeleteModal;
+export default ConfirmationModal;
